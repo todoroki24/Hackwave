@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const userSchema = new mongoose.Schema({
     fullName: {
         required : [true, "Fullname is required"],
@@ -20,11 +19,30 @@ const userSchema = new mongoose.Schema({
             message : "Please enter a valid Email Address"
         }
     },
+    phoneNumber : {
+        required : [true,"Phone number is required"],
+        type : String,
+        trim : true,
+        unique : true,
+        validate : {
+            validator : validator.isMobilePhone,
+            message : "Please enter a valid Phone Number"
+        }
+    },
+    address : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Address",
+        required : true
+    },
     password : {
         required : true,
         type : String, 
         minlength : 6
-    }
+    },
+    complaints : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Complaint"
+    }]
 },{timestamps:true})
 
 userSchema.pre("save", async function (next) {

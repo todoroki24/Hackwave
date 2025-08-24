@@ -1,11 +1,11 @@
 const Complaint = require('../../models/complaint.model');
-
+const {GoogleGenerativeAI} = require('@google/generative-ai');
 const storingApiData = async (req,res)=> {
     try {
         console.log(req.body)
-    const {data} = req.body;
+    const data = req.body.command;
     console.log("Complaint received:", data);
-
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
     const prompt = `
@@ -22,6 +22,7 @@ const storingApiData = async (req,res)=> {
     
    
         const complaint = new Complaint({
+            userId: req.user._id,
             issueType: data,
             issueDetails: category
         });

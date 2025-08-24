@@ -10,7 +10,7 @@ const {reportIssue} =  require('../controllers/User.controllers/reportIssue');
 const {storingApiData}= require('../controllers/User.controllers/storingApiData');
 // Routes for registration of User
 router.get('/register',(req,res)=>{
-    res.render('signup');
+    res.render('citizen/citizen-registration');
 })
 router.post('/register',registerUser);
 
@@ -19,10 +19,10 @@ router.get('/login',(req,res)=>{
     res.render('citizen/citizen-login');
 });
 router.post('/login',loginUser);
-router.get('/dashboard',(req,res)=>{
+router.get('/dashboard',authmiddleware,(req,res)=>{
     res.render('citizen/citizen-portal');
 });
-router.post('/classify',storingApiData);
+router.post('/classify',authmiddleware,storingApiData);
 //router.post('/report-issue/:type', reportIssue);
 
 
